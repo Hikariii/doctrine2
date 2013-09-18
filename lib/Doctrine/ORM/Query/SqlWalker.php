@@ -484,7 +484,7 @@ class SqlWalker implements TreeWalker
             case ClassMetadata::INHERITANCE_TYPE_JOINED:
                 // The classes in the inheritance will be added to the query one by one,
                 // but only the root node is getting filtered
-                if ($targetEntity->name !== $targetEntity->rootEntityName) {
+                if ($targetEntity->name === $targetEntity->rootEntityName) {
                     return '';
                 }
                 break;
@@ -501,7 +501,7 @@ class SqlWalker implements TreeWalker
 
         $filterClauses = array();
         foreach ($this->em->getFilters()->getEnabledFilters() as $filter) {
-            if ('' !== $filterExpr = $filter->addFilterConstraint($targetEntity, $targetTableAlias)) {
+            if ('' !== $filterExpr = $filter->addFilterConstraint($targetEntity, $targetTableAlias, $this->tableAliasMap)) {
                 $filterClauses[] = '(' . $filterExpr . ')';
             }
         }
